@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 public class InsertionQSort<T> extends QSort<T> {
 
-    public static final int THRESHOLD = 10;
+    protected static final int THRESHOLD = 10;
 
-    protected void sort(T[] arr, int first, int last, Comparator c) {
+    public void sort(T[] arr, int first, int last, Comparator c) {
         int dim = last - first;
         if (dim > THRESHOLD) {
             int p = partition(arr, first, last, c);

@@ -75,4 +75,11 @@ public abstract class QSort<T> {
         arr[j] = tmp;
     }
 
+    public String toString() {
+        String name = super.toString();
+        name = name.substring(name.lastIndexOf(".") + 1 );
+        name = name.substring(0, name.lastIndexOf("@"));
+        return name;
+    }
+
 }

@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class ThreeWayQSort<T> extends QSort<T> {
 
-     protected void sort(T[] arr, int first, int last, Comparator c) {
+     public void sort(T[] arr, int first, int last, Comparator c) {
          if (first >= last) return;
 
          int less = first;

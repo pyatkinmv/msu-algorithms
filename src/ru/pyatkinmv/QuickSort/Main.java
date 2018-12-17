@@ -1,12 +1,11 @@
 package ru.pyatkinmv.QuickSort;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public class Main{
-
-    static int numOfCompars;
 
     public static void print(Object[] arr) {
         for (int i = 0; i < arr.length; ++i)
@@ -14,12 +13,12 @@ public class Main{
         System.out.println();
     }
     public static void main(String[] args) {
-
         List<QSort> qSorts = Arrays.asList(
                 new SimpleQSort<Integer>(),
                 new RecursionOptimizedQSort<Integer>(),
                 new ThreeWayQSort<Integer>(),
-                new InsertionQSort<Integer>()
+                new InsertionQSort<Integer>(),
+                new CombinedQSort<Integer>()
         );
 
         qSorts.forEach(it -> {
@@ -27,19 +26,14 @@ public class Main{
             for(int i = 0; i < 100; ++i)
                 arr[i] = i;
 
-            it.sort(arr, (o1, o2)-> {
-                        numOfCompars++;
-                        return ((Integer) o1).compareTo((Integer) o2);
-                    }
-            );
-            String name = it.toString();
-            name = name.substring(name.lastIndexOf(".") + 1 );
-            name = name.substring(0, name.lastIndexOf("@"));
-            System.out.println("Number of comparisons by " + name + ": " + numOfCompars);
+            CountingComparator comparator = new CountingComparator(Comparator.comparing(o -> ((Integer) o)));
+
+            it.sort(arr, comparator);
+
+            System.out.println("Number of comparisons by " + it.toString() + ": " + comparator.getCompares());
             print(arr);
             System.out.println();
 
-            numOfCompars = 0;
         });
 
         Random rand = new Random();
@@ -47,11 +41,10 @@ public class Main{
         for(int i = 0; i < 100; ++i)
             arr[i] = rand.nextInt(100);
 
-        Arrays.sort(arr, (o1, o2)-> {
-            numOfCompars++;
-            return o1.compareTo(o2);
-        });
+        CountingComparator comparator = new CountingComparator(Comparator.comparing(o -> ((Integer) o)));
 
-        System.out.println("Number of comparisons in standard method: " + numOfCompars);
+        Arrays.sort(arr, comparator);
+
+        System.out.println("Number of comparisons in standard method: " + comparator.getCompares());
     }
 }
