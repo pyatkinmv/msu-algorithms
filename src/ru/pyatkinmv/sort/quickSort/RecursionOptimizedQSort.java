@@ -1,9 +1,10 @@
-package ru.pyatkinmv.QuickSort;
+package ru.pyatkinmv.sort.quickSort;
 
 import java.util.Comparator;
 
-public class RecursionOptimizedQSort<T> extends QSort<T> {
+public class RecursionOptimizedQSort<T> extends SimpleQSort<T> {
 
+    @Override
     public void sort(T[] arr, int first, int last, Comparator c) {
         while (first < last) {
             int p = partition(arr, first, last, c);
@@ -17,4 +18,5 @@ public class RecursionOptimizedQSort<T> extends QSort<T> {
             }
         }
     }
+
 }

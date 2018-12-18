@@ -1,4 +1,4 @@
-package ru.pyatkinmv.QuickSort;
+package ru.pyatkinmv.sort;
 
 import java.util.Comparator;
 

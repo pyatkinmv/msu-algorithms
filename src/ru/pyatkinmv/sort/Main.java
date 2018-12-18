@@ -1,4 +1,6 @@
-package ru.pyatkinmv.QuickSort;
+package ru.pyatkinmv.sort;
+
+import ru.pyatkinmv.sort.quickSort.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,7 +16,7 @@ public class Main{
     }
     public static void main(String[] args) {
         List<Sort> sorts = Arrays.asList(
-                new QSort<Integer>(),
+                new SimpleQSort<Integer>(),
                 new RecursionOptimizedQSort<Integer>(),
                 new ThreeWayQSort<Integer>(),
                 new InsertionQSort<Integer>(),
@@ -30,7 +32,7 @@ public class Main{
             for(int i = 0; i < 100; ++i)
                 arr[i] = 100 - i;
 
-            CountingComparator comparator = new CountingComparator(Comparator.comparing(o -> ((Integer) o)));
+            CountingComparator comparator = new CountingComparator(Comparator.comparingInt(a -> (Integer) a));
 
             it.sort(arr, comparator);
 

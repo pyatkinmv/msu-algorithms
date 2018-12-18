@@ -1,13 +1,18 @@
-package ru.pyatkinmv.QuickSort;
+package ru.pyatkinmv.sort;
 
 import java.util.Comparator;
 
 public class InsertionSort<T> extends Sort<T> {
 
-    protected void sort(T[] arr,int first, int last, Comparator c) {
+    @Override
+    public void sort(T[] arr, Comparator c) {
+        sort(arr, 0, arr.length - 1, c);
+    }
+
+    @Override
+    public void sort(T[] arr, int first, int last, Comparator c) {
         T tmp;
         int j;
-
         for (int i = first; i < last; i++) {
             if (c.compare(arr[i], arr[i + 1]) > 0) {
                 tmp = arr[i + 1];

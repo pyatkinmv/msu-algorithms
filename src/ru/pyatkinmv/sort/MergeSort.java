@@ -1,4 +1,4 @@
-package ru.pyatkinmv.QuickSort;
+package ru.pyatkinmv.sort;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -6,7 +6,12 @@ import java.util.Comparator;
 public class MergeSort<T> extends Sort<T> {
 
     @Override
-    protected void sort(T[] arr, int first, int last, Comparator c) {
+    public void sort(T[] arr, Comparator c) {
+        sort(arr, 0, arr.length - 1, c);
+    }
+
+    @Override
+    public void sort(T[] arr, int first, int last, Comparator c) {
         int len = arr.length;
         int n = 1; // кратность сравнений (сравнивать по 1-му элем., 2-м ...)
         int shift; // сдвиг в перебираемом массиве

@@ -1,8 +1,11 @@
-package ru.pyatkinmv.QuickSort;
+package ru.pyatkinmv.sort.quickSort;
+
+import ru.pyatkinmv.sort.InsertionSort;
 
 import java.util.Comparator;
 
-public class InsertionQSort<T> extends QSort<T> {
+public class InsertionQSort<T> extends SimpleQSort<T> {
+
     protected static final int THRESHOLD = 10;
 
     protected InsertionSort<T> insertionSort;
@@ -11,6 +14,7 @@ public class InsertionQSort<T> extends QSort<T> {
         insertionSort = new InsertionSort<>();
     }
 
+    @Override
     public void sort(T[] arr, int first, int last, Comparator c) {
         int dim = last - first;
         if (dim > THRESHOLD) {
@@ -21,6 +25,5 @@ public class InsertionQSort<T> extends QSort<T> {
             insertionSort.sort(arr, first, last, c);
         }
     }
-
 
 }
