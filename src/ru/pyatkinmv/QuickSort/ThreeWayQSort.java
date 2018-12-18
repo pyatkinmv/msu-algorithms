@@ -18,7 +18,7 @@ public class ThreeWayQSort<T> extends QSort<T> {
              } else if (c.compare(arr[i], value) > 0) {
                  swap(arr, i, greater--);
              } else {
-                 i++;
+                 ++i;
              }
          }
          sort(arr, first, less - 1, c);

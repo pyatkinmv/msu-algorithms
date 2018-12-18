@@ -18,10 +18,10 @@ public class CombinedQSort<T> extends InsertionQSort<T> {
                     last = p - 1;
                 }
             } else {
-                insertionSort(arr, first, last, c);
+                insertionSort.sort(arr, first, last, c);
                 last = first;
             }
         }
     }
-    
+
 }

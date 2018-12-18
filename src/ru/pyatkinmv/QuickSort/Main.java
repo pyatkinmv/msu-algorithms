@@ -13,18 +13,22 @@ public class Main{
         System.out.println();
     }
     public static void main(String[] args) {
-        List<QSort> qSorts = Arrays.asList(
-                new SimpleQSort<Integer>(),
+        List<Sort> sorts = Arrays.asList(
+                new QSort<Integer>(),
                 new RecursionOptimizedQSort<Integer>(),
                 new ThreeWayQSort<Integer>(),
                 new InsertionQSort<Integer>(),
-                new CombinedQSort<Integer>()
+                new CombinedQSort<Integer>(),
+                new InsertionSort<Integer>(),
+                new SelectionSort<Integer>(),
+                new BubbleSort<Integer>(),
+                new MergeSort<Integer>()
         );
 
-        qSorts.forEach(it -> {
+        sorts.forEach(it -> {
             Integer[] arr = new Integer[100];
             for(int i = 0; i < 100; ++i)
-                arr[i] = i;
+                arr[i] = 100 - i;
 
             CountingComparator comparator = new CountingComparator(Comparator.comparing(o -> ((Integer) o)));
 
@@ -33,7 +37,6 @@ public class Main{
             System.out.println("Number of comparisons by " + it.toString() + ": " + comparator.getCompares());
             print(arr);
             System.out.println();
-
         });
 
         Random rand = new Random();
