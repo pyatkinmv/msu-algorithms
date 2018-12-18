@@ -2,7 +2,9 @@ package ru.pyatkinmv.sort;
 
 import java.util.Comparator;
 
-public class SelectionSort<T> extends Sort<T> {
+import static ru.pyatkinmv.sort.ArrayUtils.swap;
+
+public class SelectionSort<T> implements Sort<T> {
 
     @Override
     public void sort(T[] arr, Comparator c) {

@@ -2,22 +2,27 @@ package ru.pyatkinmv.sort;
 
 import java.util.Comparator;
 
-public class CountingComparator implements Comparator {
+public class CountingComparator<T> implements Comparator<T> {
     private int compares = 0;
-    private Comparator comparator;
+    private Comparator<T> comparator;
 
-    private CountingComparator() {}
-
-    public CountingComparator(Comparator c) {
+    public CountingComparator(Comparator<T> c) {
         comparator = c;
     }
 
-    public int compare(Object o1, Object o2) {
+    private CountingComparator() {}
+
+    public int getCompares() {
+        return compares;
+    }
+
+    public void reset() {
+        compares = 0;
+    }
+
+    public int compare(T o1, T o2) {
         ++compares;
         return comparator.compare(o1, o2);
     }
 
-    public int getCompares() {
-       return compares;
-    }
 }

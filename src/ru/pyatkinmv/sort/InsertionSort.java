@@ -2,7 +2,7 @@ package ru.pyatkinmv.sort;
 
 import java.util.Comparator;
 
-public class InsertionSort<T> extends Sort<T> {
+public class InsertionSort<T> implements Sort<T> {
 
     @Override
     public void sort(T[] arr, Comparator c) {

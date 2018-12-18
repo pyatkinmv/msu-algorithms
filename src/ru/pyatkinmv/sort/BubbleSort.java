@@ -2,7 +2,9 @@ package ru.pyatkinmv.sort;
 
 import java.util.Comparator;
 
-public class BubbleSort<T> extends Sort<T> {
+import static ru.pyatkinmv.sort.ArrayUtils.swap;
+
+public class BubbleSort<T> implements Sort<T> {
 
     @Override
     public void sort(T[] arr, Comparator c) {

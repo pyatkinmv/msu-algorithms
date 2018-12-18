@@ -2,7 +2,9 @@ package ru.pyatkinmv.sort.quickSort;
 
 import java.util.Comparator;
 
-public class SimpleQSort<T> extends QSort<T> {
+import static ru.pyatkinmv.sort.ArrayUtils.swap;
+
+public class BasicQSort<T> extends QSort<T> {
 
     @Override
     public void sort(T[] arr, int first, int last, Comparator c) {

@@ -4,7 +4,7 @@ import ru.pyatkinmv.sort.InsertionSort;
 
 import java.util.Comparator;
 
-public class InsertionQSort<T> extends SimpleQSort<T> {
+public class InsertionQSort<T> extends BasicQSort<T> {
 
     protected static final int THRESHOLD = 10;
 

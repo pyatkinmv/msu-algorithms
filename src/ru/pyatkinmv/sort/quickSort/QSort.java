@@ -3,11 +3,10 @@ package ru.pyatkinmv.sort.quickSort;
 import ru.pyatkinmv.sort.Sort;
 
 import java.util.Comparator;
-import java.util.Random;
 
-public abstract class QSort<T> extends Sort<T> {
+import static ru.pyatkinmv.sort.ArrayUtils.shuffle;
 
-    abstract protected int partition(T[] arr, int first, int last, Comparator c);
+public abstract class QSort<T> implements Sort<T> {
 
     public void sort(T[] arr, Comparator c) {
         shuffle(arr);
@@ -50,15 +49,6 @@ public abstract class QSort<T> extends Sort<T> {
             }
         }
         return middle;
-    }
-
-    private static <T> void shuffle(T[] arr) {
-        int index;
-        Random random = new Random();
-        for (int i = arr.length - 1; i > 0; i--) {
-            index = random.nextInt(i + 1);
-            swap(arr, i, index);
-        }
     }
 
 }

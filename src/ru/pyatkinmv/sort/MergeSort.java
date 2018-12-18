@@ -3,7 +3,7 @@ package ru.pyatkinmv.sort;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class MergeSort<T> extends Sort<T> {
+public class MergeSort<T> implements Sort<T> {
 
     @Override
     public void sort(T[] arr, Comparator c) {
@@ -57,11 +57,4 @@ public class MergeSort<T> extends Sort<T> {
         return result;
     }
 
-//    private T[] sortMerge(T[] arr, Comparator c) {
-//        int len = arr.length;
-//        if (len < 2) return arr;
-//        int middle = len / 2;
-//        return merge(sortMerge(Arrays.copyOfRange(arr, 0, middle), c),
-//                sortMerge(Arrays.copyOfRange(arr, middle, len), c), c);
-//    }
 }

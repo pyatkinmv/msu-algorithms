@@ -2,7 +2,7 @@ package ru.pyatkinmv.sort.quickSort;
 
 import java.util.Comparator;
 
-public class RecursionOptimizedQSort<T> extends SimpleQSort<T> {
+public class RecursionOptimizedQSort<T> extends BasicQSort<T> {
 
     @Override
     public void sort(T[] arr, int first, int last, Comparator c) {
