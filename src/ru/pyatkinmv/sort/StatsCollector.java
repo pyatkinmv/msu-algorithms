@@ -7,6 +7,7 @@ import ru.pyatkinmv.sort.simpleSort.SelectionSort;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.copyOfRange;
 import static ru.pyatkinmv.sort.IntArrayFactory.ArrayType.RANDOM_DISTINCT;
@@ -46,16 +47,18 @@ public class StatsCollector {
         Integer[] arr = new IntArrayFactory(NUM_OF_DUPLICATES).createArray(ARRAY_SIZE, RANDOM_DISTINCT);
 
         for (int i = 0; i < SORT_RUNS; ++i) {
-            resultMap.forEach((sortImpl, stats) -> {
+            for (Map.Entry<Sort, SortInfo> entry : resultMap.entrySet()) {
+                Sort sortImpl = entry.getKey();
+                SortInfo sortInfo = entry.getValue();
                 Integer[] copyArr = copyOfRange(arr, 0, arr.length - 1);
 
                 double timeStart = System.currentTimeMillis();
                 sortImpl.sort(copyArr, comparator);
                 double runTime = (System.currentTimeMillis() - timeStart) / 1000;
 
-                stats.addCompare(comparator.getCompares(), runTime);
+                sortInfo.addCompare(comparator.getCompares(), runTime);
                 comparator.reset();
-            });
+            }
         }
     }
 
