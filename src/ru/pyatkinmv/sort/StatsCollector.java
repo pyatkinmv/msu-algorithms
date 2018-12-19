@@ -7,12 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Arrays.copyOfRange;
-import static java.util.Arrays.sort;
-import static ru.pyatkinmv.sort.ArrayUtils.randIntArr;
+import static ru.pyatkinmv.sort.IntArrayFactory.ArrayType.RANDOM;
+import static ru.pyatkinmv.sort.IntArrayFactory.ArrayType.RANDOM_DISTINCT;
 
 public class StatsCollector {
-    public static final int COUNT = 100;
-    public static final int BOUND = 100;
+    private static final int ARRAY_SIZE = 10000;
+    private static final int SORT_RUNS = 10;
+    private static final int NUM_OF_DUPLICATES = 8;
+
 
     public static void main(String... args) {
 
@@ -22,44 +24,48 @@ public class StatsCollector {
                 put(new ThreeWayQSort<Integer>(), new Stats());
                 put(new InsertionQSort<Integer>(), new Stats());
                 put(new CombinedQSort<Integer>(), new Stats());
-                put(new InsertionSort<Integer>(), new Stats());
-                put(new SelectionSort<Integer>(), new Stats());
-                put(new BubbleSort<Integer>(), new Stats());
+                put(new RecursionOptimizedQSort(), new Stats());
                 put(new MergeSort<Integer>(), new Stats());
+//                put(new InsertionSort<Integer>(), new Stats());
+//                put(new SelectionSort<Integer>(), new Stats());
+//                put(new BubbleSort<Integer>(), new Stats());
             }
         };
 
-
         CountingComparator<Integer> comparator = new CountingComparator<>(Integer::compare);
 
-        Integer[] arr = randIntArr(COUNT);
+        Integer[] arr = new IntArrayFactory(NUM_OF_DUPLICATES).createArray(ARRAY_SIZE, RANDOM_DISTINCT);
 
-        sortStatsMap.entrySet().forEach(it -> {
-            Integer[] copyArr = copyOfRange(arr, 0, arr.length - 1);
+        for (int i = 0; i < SORT_RUNS; ++i) {
 
-            double timeStart = System.currentTimeMillis();
+            sortStatsMap.forEach((sortImpl, stats) -> {
 
-            it.getKey().sort(copyArr, comparator);
+                Integer[] copyArr = copyOfRange(arr, 0, arr.length - 1);
 
-            double runTime = System.currentTimeMillis() - timeStart;
+                double timeStart = System.currentTimeMillis();
 
-            it.getValue().addCompare(comparator.getCompares(), runTime);
+                sortImpl.sort(copyArr, comparator);
 
+                double runTime = (System.currentTimeMillis() - timeStart) / 1000;
 
+                stats.addCompare(comparator.getCompares(), runTime);
 
-            comparator.reset();
-//            print(copyArr);
-//            System.out.println();
-        });
+                comparator.reset();
+            });
+
+        }
+
 
         sortStatsMap.forEach((key, value) ->
-                System.out.printf("Number of comparisons by %s: %d, time: %f \n",
+                System.out.printf("%-25s  |  number of compares: %10d  |  average time: %10f seconds  |  number of runs: %10d\n",
                         key.getClass().getSimpleName(),
                         value.getAverageNumOfCompares(),
-                        value.getAverageTime()
+                        value.getAverageTime(),
+                        value.getNumOfSortRuns()
         ));
 
         Arrays.sort(arr, comparator);
         System.out.println("Number of comparisons by Arrays.sort: " + comparator.getCompares());
     }
+
 }

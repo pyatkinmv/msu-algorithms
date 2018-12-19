@@ -10,8 +10,6 @@ public class CountingComparator<T> implements Comparator<T> {
         comparator = c;
     }
 
-    private CountingComparator() {}
-
     public int getCompares() {
         return compares;
     }

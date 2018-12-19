@@ -5,27 +5,21 @@ import java.util.List;
 
 public class Stats {
     private int numOfSortsRun;
-    private List<Integer> listOfCompares;
-    private List<Double> listOfRunTimes;
-
-    public Stats() {
-        numOfSortsRun = 0;
-        listOfCompares = new ArrayList<>();
-        listOfRunTimes = new ArrayList<>();
-    }
+    private int averageNumOfCompares;
+    private double averageTime;
 
     public void addCompare(int numOfCompares, double time) {
-        listOfCompares.add(numOfCompares);
-        listOfRunTimes.add(time);
+        averageNumOfCompares = (numOfSortsRun * averageNumOfCompares + numOfCompares) / (numOfSortsRun + 1);
+        averageTime = (numOfSortsRun * averageTime + time) / (numOfSortsRun + 1);
         ++numOfSortsRun;
     }
 
     public int getAverageNumOfCompares() {
-        return listOfCompares.stream().mapToInt(Integer::intValue).sum() / numOfSortsRun;
+        return averageNumOfCompares;
     }
 
     public double getAverageTime() {
-        return listOfRunTimes.stream().mapToDouble(d -> d).sum();
+        return averageTime;
     }
 
     public int getNumOfSortRuns() {

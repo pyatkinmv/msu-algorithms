@@ -41,25 +41,4 @@ public class ArrayUtils {
         System.out.println();
     }
 
-    public static Integer[] randIntArr(int bound, int size) {
-        Random rand = new Random();
-        Integer[] arr = new Integer[size];
-
-        for(int i = 0; i < size; ++i)
-            arr[i] = rand.nextInt(bound);
-
-        return arr;
-    }
-
-    public static Integer[] randIntArr(int size) {
-        Integer[] arr = new Integer[size];
-
-        for(int i = 0; i < size; ++i)
-            arr[i] = i;
-
-        shuffle(arr);
-
-        return arr;
-    }
-
 }
