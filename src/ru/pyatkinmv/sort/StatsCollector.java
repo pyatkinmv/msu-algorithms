@@ -32,9 +32,9 @@ public class StatsCollector {
                 put(new ThreeWayQSort<Integer>(), new SortInfo());
                 put(new InsertionQSort<Integer>(), new SortInfo());
                 put(new CombinedQSort<Integer>(), new SortInfo());
-                put(new RecursionOptimizedQSort(), new SortInfo());
+                put(new RecursionOptimizedQSort<Integer>(), new SortInfo());
                 put(new MergeSort<Integer>(), new SortInfo());
-                put(new StandardSort(), new SortInfo());
+                put(new StandardSort<Integer>(), new SortInfo());
                 put(new InsertionSort<Integer>(), new SortInfo());
                 put(new SelectionSort<Integer>(), new SortInfo());
                 put(new BubbleSort<Integer>(), new SortInfo());
