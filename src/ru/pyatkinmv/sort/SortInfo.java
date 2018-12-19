@@ -1,9 +1,6 @@
 package ru.pyatkinmv.sort;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Stats {
+public class SortInfo {
     private int numOfSortsRun;
     private int averageNumOfCompares;
     private double averageTime;

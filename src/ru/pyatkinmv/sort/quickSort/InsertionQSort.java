@@ -1,6 +1,6 @@
 package ru.pyatkinmv.sort.quickSort;
 
-import ru.pyatkinmv.sort.InsertionSort;
+import ru.pyatkinmv.sort.simpleSort.InsertionSort;
 
 import java.util.Comparator;
 

@@ -1,7 +1,5 @@
 package ru.pyatkinmv.sort.quickSort;
 
-import ru.pyatkinmv.sort.Sort;
-
 import java.util.Comparator;
 
 import static ru.pyatkinmv.sort.ArrayUtils.swap;
@@ -25,7 +23,6 @@ public class ThreeWayQSort<T> extends QSort<T> {
                 ++i;
             }
         }
-
         sort(arr, first, less - 1, c);
         sort(arr, greater + 1, last, c);
     }

@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import static ru.pyatkinmv.sort.ArrayUtils.swap;
 
-// CombinedQSort has several those features:
+// CombinedQSort has several features:
 // - tail call optimized
 // - insertion sort on arrays with length less than constant THRESHOLD
 // - three-way partitioning
