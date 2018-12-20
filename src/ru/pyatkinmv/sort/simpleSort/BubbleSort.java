@@ -16,7 +16,7 @@ public class BubbleSort<T> implements Sort<T> {
     @Override
     public void sort(T[] arr, int first, int last, Comparator c) {
         for(int i = last; i > first; --i) {
-            for (int j = 0; j < i; ++j) {
+            for (int j = first; j < i; ++j) {
                 if (c.compare(arr[j], arr[j + 1]) > 0) {
                     swap(arr, j, j + 1);
                 }

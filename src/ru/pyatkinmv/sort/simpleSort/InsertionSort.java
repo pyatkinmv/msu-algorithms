@@ -20,7 +20,7 @@ public class InsertionSort<T> implements Sort<T> {
                 tmp = arr[i + 1];
                 arr[i + 1] = arr[i];
                 j = i;
-                while (j > 0 && c.compare(tmp, arr[j - 1]) < 0) {
+                while (j > first && c.compare(tmp, arr[j - 1]) < 0) {
                     arr[j] = arr[j - 1];
                     j--;
                 }

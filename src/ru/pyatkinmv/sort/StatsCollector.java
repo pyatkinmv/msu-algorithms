@@ -7,14 +7,13 @@ import ru.pyatkinmv.sort.simpleSort.SelectionSort;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import static java.util.Arrays.copyOfRange;
 import static ru.pyatkinmv.sort.IntArrayFactory.ArrayType.RANDOM_DISTINCT;
 
 public class StatsCollector {
     private static final int ARRAY_SIZE = 10000;
-    private static final int SORT_RUNS = 10;
+    private static final int SORT_RUNS = 1;
     private static final int NUM_OF_DUPLICATES = 10;
 
     private Map<Sort, SortInfo> resultMap;
