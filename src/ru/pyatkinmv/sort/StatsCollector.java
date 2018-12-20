@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Arrays.copyOfRange;
+import static ru.pyatkinmv.sort.ArrayUtils.print;
 import static ru.pyatkinmv.sort.IntArrayFactory.ArrayType.RANDOM_DISTINCT;
 
 public class StatsCollector {
@@ -49,12 +50,11 @@ public class StatsCollector {
             for (Map.Entry<Sort, SortInfo> entry : resultMap.entrySet()) {
                 Sort sortImpl = entry.getKey();
                 SortInfo sortInfo = entry.getValue();
-                Integer[] copyArr = copyOfRange(arr, 0, arr.length - 1);
+                Integer[] copyArr = copyOfRange(arr, 0, arr.length);
 
                 double timeStart = System.currentTimeMillis();
                 sortImpl.sort(copyArr, comparator);
                 double runTime = (System.currentTimeMillis() - timeStart) / 1000;
-
                 sortInfo.addCompare(comparator.getCompares(), runTime);
                 comparator.reset();
             }

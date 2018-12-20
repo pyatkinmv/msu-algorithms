@@ -1,5 +1,6 @@
 package ru.pyatkinmv.sort;
 
+import java.util.Comparator;
 import java.util.Random;
 
 public class ArrayUtils {
@@ -17,6 +18,13 @@ public class ArrayUtils {
             index = random.nextInt(i + 1);
             swap(arr, i, index);
         }
+    }
+
+    public static <T> boolean isSorted(T[] arr, Comparator c) {
+        for (int i = 0; i < arr.length - 1; ++i)
+            if (c.compare(arr[i], arr[i + 1]) > 0) return false;
+
+        return true;
     }
 
 // TODO: needs to be fixed
