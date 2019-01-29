@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- *  This is modified version of the RedBlackBST implementation taken from the edu.princeton.cs.algs4.RedBlackBST
- *  Added inner iterator RedBlackBSTIterator, and the class is made iterable
- *  The keys(lo, hi) and keys() methods returns not Iterable<Key>, but Iterator<Key>
+ * This is modified version of the RedBlackBST implementation taken from the edu.princeton.cs.algs4.RedBlackBST
+ * Added inner iterator RedBlackBSTIterator, and the class is made iterable
+ * The keys(lo, hi) and keys() methods returns not Iterable<Key>, but Iterator<Key>
  */
-public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements Iterable<Key> {
+public class IterableRedBlackBST<Key extends Comparable<Key>, Value> {
 
-    private static final boolean RED   = true;
+    private static final boolean RED = true;
     private static final boolean BLACK = false;
 
     private Node root;
@@ -61,14 +61,32 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return get(root, key);
     }
 
-    private Value get(Node x, Key key) {
-        while (x != null) {
-            int cmp = key.compareTo(x.key);
-            if      (cmp < 0) x = x.left;
-            else if (cmp > 0) x = x.right;
-            else              return x.val;
+    public static void main(String[] args) throws Exception {
+        IterableRedBlackBST<Integer, String> tree = new IterableRedBlackBST<>();
+
+        List<String> nums = Arrays.asList("zero", "one", "two", "three", "four", "five",
+                "six", "seven", "eight", "nine", "ten");
+
+        for (int i = 0; i < nums.size(); ++i) {
+            tree.put(i, nums.get(i));
         }
-        return null;
+
+        for (int i = 0; i < nums.size(); ++i) {
+            for (int j = nums.size() - 1; j >= 0; --j) {
+                int real = 0;
+                int expected = (j >= i) ? j - i + 1 : 0;
+                System.out.printf("keys(%d, %d) \n", i, j);
+
+                for (int next : tree.keys(i, j)) {
+                    System.out.println(next);
+                    ++real;
+                }
+
+                if (real != expected) throw new Exception();
+                System.out.printf("real = %d, expected = %d \n \n", real, expected);
+            }
+        }
+
     }
 
     public boolean contains(Key key) {
@@ -86,20 +104,14 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         root.color = BLACK;
     }
 
-    private Node put(Node h, Key key, Value val) {
-        if (h == null) return new Node(key, val, RED, 1);
-
-        int cmp = key.compareTo(h.key);
-        if      (cmp < 0) h.left  = put(h.left,  key, val);
-        else if (cmp > 0) h.right = put(h.right, key, val);
-        else              h.val   = val;
-
-        if (isRed(h.right) && !isRed(h.left))      h = rotateLeft(h);
-        if (isRed(h.left)  &&  isRed(h.left.left)) h = rotateRight(h);
-        if (isRed(h.left)  &&  isRed(h.right))     flipColors(h);
-        h.size = size(h.left) + size(h.right) + 1;
-
-        return h;
+    private Value get(Node x, Key key) {
+        while (x != null) {
+            int cmp = key.compareTo(x.key);
+            if (cmp < 0) x = x.left;
+            else if (cmp > 0) x = x.right;
+            else return x.val;
+        }
+        return null;
     }
 
     public void deleteMin() {
@@ -159,29 +171,20 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         if (!isEmpty()) root.color = BLACK;
     }
 
-    private Node delete(Node h, Key key) {
+    private Node put(Node h, Key key, Value val) {
+        if (h == null) return new Node(key, val, RED, 1);
 
-        if (key.compareTo(h.key) < 0)  {
-            if (!isRed(h.left) && !isRed(h.left.left))
-                h = moveRedLeft(h);
-            h.left = delete(h.left, key);
-        }
-        else {
-            if (isRed(h.left))
-                h = rotateRight(h);
-            if (key.compareTo(h.key) == 0 && (h.right == null))
-                return null;
-            if (!isRed(h.right) && !isRed(h.right.left))
-                h = moveRedRight(h);
-            if (key.compareTo(h.key) == 0) {
-                Node x = min(h.right);
-                h.key = x.key;
-                h.val = x.val;
-                h.right = deleteMin(h.right);
-            }
-            else h.right = delete(h.right, key);
-        }
-        return balance(h);
+        int cmp = key.compareTo(h.key);
+        if (cmp < 0) h.left = put(h.left, key, val);
+        else if (cmp > 0) h.right = put(h.right, key, val);
+        else h.val = val;
+
+        if (isRed(h.right) && !isRed(h.left)) h = rotateLeft(h);
+        if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
+        if (isRed(h.left) && isRed(h.right)) flipColors(h);
+        h.size = size(h.left) + size(h.right) + 1;
+
+        return h;
     }
 
     private Node rotateRight(Node h) {
@@ -212,14 +215,27 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         h.right.color = !h.right.color;
     }
 
-    private Node moveRedLeft(Node h) {
-         flipColors(h);
-        if (isRed(h.right.left)) {
-            h.right = rotateRight(h.right);
-            h = rotateLeft(h);
-            flipColors(h);
+    private Node delete(Node h, Key key) {
+
+        if (key.compareTo(h.key) < 0) {
+            if (!isRed(h.left) && !isRed(h.left.left))
+                h = moveRedLeft(h);
+            h.left = delete(h.left, key);
+        } else {
+            if (isRed(h.left))
+                h = rotateRight(h);
+            if (key.compareTo(h.key) == 0 && (h.right == null))
+                return null;
+            if (!isRed(h.right) && !isRed(h.right.left))
+                h = moveRedRight(h);
+            if (key.compareTo(h.key) == 0) {
+                Node x = min(h.right);
+                h.key = x.key;
+                h.val = x.val;
+                h.right = deleteMin(h.right);
+            } else h.right = delete(h.right, key);
         }
-        return h;
+        return balance(h);
     }
 
     private Node moveRedRight(Node h) {
@@ -231,18 +247,20 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return h;
     }
 
-    private Node balance(Node h) {
-        if (isRed(h.right))                      h = rotateLeft(h);
-        if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
-        if (isRed(h.left) && isRed(h.right))     flipColors(h);
-
-        h.size = size(h.left) + size(h.right) + 1;
+    private Node moveRedLeft(Node h) {
+        flipColors(h);
+        if (isRed(h.right.left)) {
+            h.right = rotateRight(h.right);
+            h = rotateLeft(h);
+            flipColors(h);
+        }
         return h;
     }
 
     public int height() {
         return height(root);
     }
+
     private int height(Node x) {
         if (x == null) return -1;
         return 1 + Math.max(height(x.left), height(x.right));
@@ -253,9 +271,13 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return min(root).key;
     }
 
-    private Node min(Node x) {
-        if (x.left == null) return x;
-        else                return min(x.left);
+    private Node balance(Node h) {
+        if (isRed(h.right)) h = rotateLeft(h);
+        if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
+        if (isRed(h.left) && isRed(h.right)) flipColors(h);
+
+        h.size = size(h.left) + size(h.right) + 1;
+        return h;
     }
 
     public Key max() {
@@ -263,9 +285,14 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return max(root).key;
     }
 
+    private Node min(Node x) {
+        if (x.left == null) return x;
+        else return min(x.left);
+    }
+
     private Node max(Node x) {
         if (x.right == null) return x;
-        else                 return max(x.right);
+        else return max(x.right);
     }
 
     public Key floor(Key key) {
@@ -273,17 +300,17 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         if (isEmpty()) throw new NoSuchElementException("calls floor() with empty symbol table");
         Node x = floor(root, key);
         if (x == null) return null;
-        else           return x.key;
+        else return x.key;
     }
 
     private Node floor(Node x, Key key) {
         if (x == null) return null;
         int cmp = key.compareTo(x.key);
         if (cmp == 0) return x;
-        if (cmp < 0)  return floor(x.left, key);
+        if (cmp < 0) return floor(x.left, key);
         Node t = floor(x.right, key);
         if (t != null) return t;
-        else           return x;
+        else return x;
     }
 
     public Key ceiling(Key key) {
@@ -291,17 +318,7 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         if (isEmpty()) throw new NoSuchElementException("calls ceiling() with empty symbol table");
         Node x = ceiling(root, key);
         if (x == null) return null;
-        else           return x.key;
-    }
-
-    private Node ceiling(Node x, Key key) {
-        if (x == null) return null;
-        int cmp = key.compareTo(x.key);
-        if (cmp == 0) return x;
-        if (cmp > 0)  return ceiling(x.right, key);
-        Node t = ceiling(x.left, key);
-        if (t != null) return t;
-        else           return x;
+        else return x.key;
     }
 
     public Key select(int k) {
@@ -312,11 +329,14 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return x.key;
     }
 
-    private Node select(Node x, int k) {
-        int t = size(x.left);
-        if      (t > k) return select(x.left,  k);
-        else if (t < k) return select(x.right, k-t-1);
-        else            return x;
+    private Node ceiling(Node x, Key key) {
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp == 0) return x;
+        if (cmp > 0) return ceiling(x.right, key);
+        Node t = ceiling(x.left, key);
+        if (t != null) return t;
+        else return x;
     }
 
     public int rank(Key key) {
@@ -324,66 +344,27 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return rank(key, root);
     }
 
+    private Node select(Node x, int k) {
+        int t = size(x.left);
+        if (t > k) return select(x.left, k);
+        else if (t < k) return select(x.right, k - t - 1);
+        else return x;
+    }
+
     private int rank(Key key, Node x) {
         if (x == null) return 0;
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) return rank(key, x.left);
+        if (cmp < 0) return rank(key, x.left);
         else if (cmp > 0) return 1 + size(x.left) + rank(key, x.right);
-        else              return size(x.left);
+        else return size(x.left);
     }
 
-    // Instead of Iterable<Key> keys()
-    @Override
-    public Iterator<Key> iterator() {
-        return iterator(min(), max());
+    public Iterable<Key> keys() {
+        return keys(min(), max());
     }
 
-    // Instead of Iterable<Key> keys(Key lo, Key hi)
-    public Iterator<Key> iterator(Key lo, Key hi) {
-        return new RedBlackBSTIterator(root, lo, hi);
-    }
-
-    private class RedBlackBSTIterator implements Iterator<Key> {
-        Stack<Node> stack = new Stack<>();
-        Key lo;
-        Key hi;
-
-        RedBlackBSTIterator(Node x, Key lo, Key hi) {
-            if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
-            if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
-
-            this.lo = lo;
-            this.hi = hi;
-
-            while (x != null && lo.compareTo(x.key) <= 0) {
-                stack.push(x);
-                x = x.left;
-            }
-        }
-
-        public boolean hasNext() {
-            return !stack.isEmpty();
-        }
-
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-        public Key next() {
-            if (!hasNext()) throw new NoSuchElementException();
-
-            Node x = stack.pop();
-            Key key = x.key;
-            x = x.right;
-
-            while (x != null && hi.compareTo(x.key) >= 0) {
-                stack.push(x);
-                x = x.left;
-            }
-
-            return key;
-        }
+    public Iterable<Key> keys(Key lo, Key hi) {
+        return () -> new RedBlackBSTIterator(root, lo, hi);
     }
 
     public int size(Key lo, Key hi) {
@@ -392,15 +373,15 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
 
         if (lo.compareTo(hi) > 0) return 0;
         if (contains(hi)) return rank(hi) - rank(lo) + 1;
-        else              return rank(hi) - rank(lo);
+        else return rank(hi) - rank(lo);
     }
 
     private boolean check() {
-        if (!isBST())            StdOut.println("Not in symmetric order");
+        if (!isBST()) StdOut.println("Not in symmetric order");
         if (!isSizeConsistent()) StdOut.println("Subtree counts not consistent");
         if (!isRankConsistent()) StdOut.println("Ranks not consistent");
-        if (!is23())             StdOut.println("Not a 2-3 tree");
-        if (!isBalanced())       StdOut.println("Not balanced");
+        if (!is23()) StdOut.println("Not a 2-3 tree");
+        if (!isBalanced()) StdOut.println("Not balanced");
         return isBST() && isSizeConsistent() && isRankConsistent() && is23() && isBalanced();
     }
 
@@ -415,7 +396,10 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return isBST(x.left, min, x.key) && isBST(x.right, x.key, max);
     }
 
-    private boolean isSizeConsistent() { return isSizeConsistent(root); }
+    private boolean isSizeConsistent() {
+        return isSizeConsistent(root);
+    }
+
     private boolean isSizeConsistent(Node x) {
         if (x == null) return true;
         if (x.size != size(x.left) + size(x.right) + 1) return false;
@@ -425,14 +409,16 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
     private boolean isRankConsistent() {
         for (int i = 0; i < size(); i++)
             if (i != rank(select(i))) return false;
-        for (Iterator<Key> it = iterator(); it.hasNext(); ) {
-            Key key = it.next();
+        for (Key key : keys()) {
             if (key.compareTo(select(rank(key))) != 0) return false;
         }
         return true;
     }
 
-    private boolean is23() { return is23(root); }
+    private boolean is23() {
+        return is23(root);
+    }
+
     private boolean is23(Node x) {
         if (x == null) return true;
         if (isRed(x.right)) return false;
@@ -457,19 +443,53 @@ public class IterableRedBlackBST<Key extends Comparable<Key>, Value> implements 
         return isBalanced(x.left, black) && isBalanced(x.right, black);
     }
 
-    public static void main(String[] args) {
-        IterableRedBlackBST<Integer, String> tree = new IterableRedBlackBST<>();
+    private class RedBlackBSTIterator implements Iterator<Key> {
+        Stack<Node> stack = new Stack<>();
+        Key lo;
+        Key hi;
 
-        List<String> nums = Arrays.asList("zero","one", "two", "three", "four", "five",
-                                          "six", "seven", "eight", "nine", "ten");
+        RedBlackBSTIterator(Node x, Key lo, Key hi) {
+            if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
+            if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
 
-        for (int i = 0; i < nums.size(); ++i) {
-            tree.put(i, nums.get(i));
+            this.lo = lo;
+            this.hi = hi;
+
+            if (lo.compareTo(hi) <= 0) {
+                pushLeft(x);
+            }
         }
 
-        // RedBlackBSTIterator<Integer>
-        for (Integer key : tree) {
-            System.out.println(key + " " + tree.get(key));
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        public Key next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
+            Node x;
+            Key key;
+            do {
+                x = stack.pop();
+                key = x.key;
+                x = x.right;
+                pushLeft(x);
+            } while (key.compareTo(lo) < 0);
+
+            return key;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        private void pushLeft(Node x) {
+            while (x != null) {
+                if (hi.compareTo(x.key) >= 0) {
+                    stack.push(x);
+                }
+                x = x.left;
+            }
         }
     }
 
